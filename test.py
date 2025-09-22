@@ -305,7 +305,7 @@ def main():
     while True:
         print("\n=============================================")
         print("                 CROPIX Interface              ")
-        print("===============================================")
+        print("==============================================")
         print("1. Predict Crop Yield")
         print("2. Detect Plant Disease from Image")
         print("3. Recommend Fertilizer")
