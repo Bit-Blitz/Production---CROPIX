@@ -9,9 +9,17 @@ import warnings
 # Suppress all warnings for a cleaner output
 warnings.filterwarnings("ignore")
 
-# Suppress TensorFlow warnings by setting the log level
+# Suppress TensorFlow C++ and Python logs by setting the log level
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 import tensorflow as tf
+tf.get_logger().setLevel('ERROR')
+# Suppress absl warnings
+try:
+    import absl.logging
+    absl.logging.set_verbosity(absl.logging.ERROR)
+except ImportError:
+    pass
+
 from tensorflow.keras.models import load_model # type: ignore
 from tensorflow.keras.preprocessing import image # type: ignore
 from sklearn.preprocessing import MinMaxScaler
@@ -165,26 +173,35 @@ def recommend_fertilizer():
 
 
 def forecast_market_prices():
-    """Handles the market price forecasting workflow."""
+    """Handles a simplified market price forecast for a specific crop."""
     print("\n--- Market Price Forecast (LSTM) ---")
     if not check_file_exists(MARKET_MODEL_PATH) or not check_file_exists(MARKET_DATA_PATH):
         return
 
     try:
         model = load_model(MARKET_MODEL_PATH)
-        df = pd.read_csv(MARKET_DATA_PATH, index_col='Date', parse_dates=True)
-        
-        # Fit a scaler on the historical data to inverse_transform the predictions
+        df_historical = pd.read_csv(MARKET_DATA_PATH, index_col='Date', parse_dates=True)
+
+        # --- Get User Input ---
+        print("Available crops for forecasting:")
+        print(", ".join(df_historical.columns))
+        while True:
+            crop_name = input("Enter the crop name you want to forecast: ")
+            if crop_name in df_historical.columns:
+                break
+            else:
+                print(f"[Error] Invalid crop name. Please choose from the list above.")
+
+        weeks_to_forecast = get_int_input("Enter the number of weeks to forecast ahead: ")
+
+        # --- Scale Data and Predict ---
         scaler = MinMaxScaler(feature_range=(0, 1))
-        scaled_data = scaler.fit_transform(df)
+        scaled_data = scaler.fit_transform(df_historical)
 
         n_steps = 8 # This must match the model's training configuration
-        n_features = df.shape[1]
+        n_features = df_historical.shape[1]
 
-        # Get user input
-        weeks_to_forecast = int(input("Enter the number of weeks to forecast ahead: "))
-        
-        # Prepare the last known data as the starting point
+        # Prepare the last known data from the historical dataset as the starting point
         last_known_data = scaled_data[-n_steps:]
         current_batch = last_known_data.reshape((1, n_steps, n_features))
         forecast = []
@@ -197,14 +214,15 @@ def forecast_market_prices():
 
         # Inverse transform to get actual price values
         forecast_prices = scaler.inverse_transform(forecast)
-        
-        # Create a DataFrame for the forecast
-        last_date = df.index[-1]
-        future_dates = pd.to_datetime([last_date + pd.Timedelta(weeks=i) for i in range(1, weeks_to_forecast + 1)])
-        df_forecast = pd.DataFrame(forecast_prices, index=future_dates, columns=df.columns)
-        
-        print("\n--- Forecasted Prices (INR per Quintal) ---")
-        print(df_forecast.round(2))
+
+        # Create a DataFrame for the full forecast
+        last_historical_date = df_historical.index[-1]
+        future_dates = pd.to_datetime([last_historical_date + pd.Timedelta(weeks=i) for i in range(1, weeks_to_forecast + 1)])
+        df_forecast = pd.DataFrame(forecast_prices, index=future_dates, columns=df_historical.columns)
+
+        print(f"\n--- Forecasted Prices for {crop_name} (INR per Quintal) ---")
+        # Display only the requested crop's forecast
+        print(df_forecast[[crop_name]].round(2))
 
     except Exception as e:
         print(f"\nAn error occurred during forecasting: {e}")
