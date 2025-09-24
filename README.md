@@ -122,8 +122,5 @@ Production_CROPIX/
 └── README.md               # This file
 ```
 
-## Contributing
-We welcome contributions to CROPIX! Please feel free to fork the repository, create a new branch, and submit a pull request with your enhancements or bug fixes.
-
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details (if applicable).
