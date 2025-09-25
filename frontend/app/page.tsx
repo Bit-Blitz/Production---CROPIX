@@ -123,7 +123,7 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7 }}
             >
-              <Link href="/crop-recommendation">
+              <Link href="#model-boxes">
                 <MotionDiv
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
@@ -166,6 +166,7 @@ export default function HomePage() {
           </MotionDiv>
 
           <MotionDiv
+            id="model-boxes"
             className="mt-24 sm:mt-32"
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}

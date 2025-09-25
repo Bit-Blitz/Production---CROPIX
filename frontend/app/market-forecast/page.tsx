@@ -12,7 +12,7 @@ export default function MarketForecastPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const cropOptions = ["Wheat", "Rice", "Corn", "Soybeans"]
+  const cropOptions = ["Wheat", "Rice", "Maize", "Soybean"]
 
   const handleChange = (e) => {
     if (e.target.name === "cropName") {
@@ -124,7 +124,7 @@ export default function MarketForecastPage() {
         {loading && <p className="text-blue-500">Loading...</p>}
         {error && <p className="text-red-500">Error: {error}</p>}
 
-        {forecastData && forecastData.forecast && ( // Check if forecastData and forecastData.forecast exist
+        {forecastData && forecastData.forecast && forecastData.forecast[cropName] && (
           <div className="grid grid-cols-1 gap-8">
             <motion.div
               className="bg-white rounded-2xl shadow-lg border-2 border-green-200 p-6"
@@ -144,7 +144,7 @@ export default function MarketForecastPage() {
                       <CalendarDays className="w-5 h-5 text-purple-500 mr-2" />
                       {new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                     </h3>
-                    <p className="text-lg font-bold text-green-600">${price.toFixed(2)}</p>
+                    <p className="text-lg font-bold text-green-600">₹{price.toFixed(2)}/Quintal</p>
                   </div>
                 ))}
               </div>

@@ -31,7 +31,6 @@ export function Navigation() {
 
   const forecastItems = [
     { href: "/weather-forecast", label: "Weather Forecast" },
-    { href: "/weather-forecast-lstm", label: "LSTM Weather Forecast" },
     { href: "/market-forecast", label: "Market Forecast" },
   ]
 

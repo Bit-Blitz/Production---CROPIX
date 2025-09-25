@@ -26,7 +26,7 @@ const teamMembers = [
     role: "AI/ML Engineer",
     bio: "Specializing in machine learning models for disease detection and market forecasting. Shaikh ensures our AI is accurate and efficient.",
     social: {
-      github: "https://github.com:shaikhwarsi",
+      github: "https://github.com/shaikhwarsi",
       linkedin: "https://www.linkedin.com/in/shaikhwarsi",
       instagram: "https://www.instagram.com/shaikhwarsi",
     },
@@ -55,6 +55,16 @@ const teamMembers = [
     name: "Suryansh",
     role: "Research Paper and PPT Specialist",
     bio: "Dedicated to compiling comprehensive research papers and creating impactful presentations to showcase Cropix's innovations.",
+    social: {
+      github: "#",
+      linkedin: "#",
+      instagram: "#",
+    },
+  },
+  {
+    name: "Ayaan Daniel",
+    role: "Model Creator",
+    bio: "Responsible for designing and implementing the core machine learning models that power Cropix's recommendations.",
     social: {
       github: "#",
       linkedin: "#",

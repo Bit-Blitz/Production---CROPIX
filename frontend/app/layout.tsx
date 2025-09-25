@@ -10,7 +10,7 @@ import "./globals.css"
 export const metadata: Metadata = {
   title: "Cropix - Smart Crop Recommendations",
   description: "Find the best crops for your soil and environment with Cropix",
-  generator: "v0.app",
+  generator: "cropix.app",
 }
 
 export default function RootLayout({
